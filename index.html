@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SBT Human(s) Matter</title>
+    <!-- <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="js/liquidFillGauge.js" language="JavaScript"></script> 
+    <script type="text/javascript" src="canvid.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: HelveticaNeueLT-Roman;
+            color: #ffffff;
+            text-shadow: 0px 3px 16px rgba(3, 54, 65, 0.65);
+            margin: auto;
+        }
+
+        @font-face {
+            font-family: HelveticaNeueLT-Roman;
+            src: url(font/HelveticaNeueLT-Roman.ttf);
+        }
+
+        @font-face {
+            font-family: VAGRounded-Light;
+            src: url("font/VAG Rounded Light.ttf");
+        }
+
+        .liquidFillGaugeText {
+            font-family: Helvetica;
+            font-weight: bold;
+        }
+
+        article {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .users.ret {
+            display: block;
+            width: 100%;
+        }
+
+        .ret {
+            display: inline-block;
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            width: 48%;
+        }
+
+        svg {
+            display: block;
+            margin: auto;
+        }
+        
+        #canvid-example{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: -5;
+        }
+        .canvid {
+            width: 100%;
+            height: 100%;
+        }
+
+        #myVideo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%; 
+            min-height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        h1{
+            font-family: HelveticaNeueLT-Roman;
+            font-size: 60px;
+        }
+
+        .page1 h1{
+            font-family: VAGRounded-Light;
+            font-size: 154px;
+            letter-spacing: 4.6px;
+            margin-top: 150px;
+            margin-bottom: 0px;
+        }
+        .page1 h2{
+            font-family: HelveticaNeueLT-Roman;
+            font-size: 77px;
+            letter-spacing: 2.3px;
+            margin-top: 0px;
+            
+        }
+
+        .page1 .QRcode {
+            width: 310px;
+            height: 312px;
+            
+        }
+
+        .page2 h1{
+            font-family: HelveticaNeueLT-Roman;
+            font-size: 30px;
+            letter-spacing: 0.9px;
+            margin-top: 50px;
+            margin-bottom: 0px;
+        }
+        .page2 h2{
+            font-family: HelveticaNeueLT-Roman;
+            font-size: 60px;
+            letter-spacing: 1.8px;
+            margin-top: 0px;            
+        }
+
+        .page2 .QRcode {
+            width: 153px;
+            height: 154px;
+            
+        }
+
+        .page2 footer {
+            font-family: HelveticaNeueLT-Roman;
+            font-size: 18px;
+            color: grey;
+        }
+
+        .ico_profile {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+        }
+
+        .user{
+            position: absolute;
+            left: 20px;
+            width: 420px;
+            top: 40%;
+        }
+        .code{
+            position: absolute;
+            right: 0px;
+            
+            top: 40%;
+            float: left;
+        }
+        .code p{
+            float: left;
+            text-align: right;
+            font-size: 26px;
+            color: lightgray;
+        }
+        .main{
+            grid-gap: 10px;
+            grid-template-columns: 33% 33% 33%;
+            width: 600px;
+            display: grid;
+            margin-bottom: 50px;
+        }
+        .gauges{
+            
+            height: 600px;
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: 50% 50%;
+        }
+        div[class^="g-"]{
+            background-color: rbga(119,136,153, 0.5);
+            width: 60px;
+            border-radius: 16px;
+            box-shadow: 0px 0px 5px 6px rgba(0,0,0, 0.3);
+            position: relative;
+        }
+        .gf{
+            height: 20px;
+            width: 100%;            
+            position: absolute;
+            bottom: 0;
+            border-radius: 0 0 16px 16px;
+            background: linear-gradient(to bottom right, grey, grey);
+            transition: all 0.2s;
+        }
+        .g-i .gf{
+            background: linear-gradient(to bottom right, lightyellow, yellow);
+        }
+
+        .g-d .gf{            
+            background: linear-gradient(to bottom right, lightgreen, mediumspringgreen);           
+        }
+        .deductif .per-n{
+            color: mediumspringgreen;
+        }
+        .inductif .per-n{
+            color: yellow;
+        }
+
+        .per-t{
+            font-family: HelveticaNeueLT-Roman;
+            font-size: 30px;
+        }
+        .per-n{
+            font-size: 60px;
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        .per-s{
+            vertical-align: top;
+        }
+
+        .user > * {
+            float: left;
+            margin: 0;
+        }
+        .user .p{
+            margin: 0;
+        }
+        .n-users {
+            font-size: 80px;
+            display: block;
+            text-align: left;
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            perspective: 1000px;           
+        }
+        .deco{
+            position: absolute;
+            bottom: -50px;
+            width: 60px;
+            height: 60px;
+            background-image: url(images/deco.svg);
+        }
+        .lb-n-users{
+            color: lightgray;
+        }
+
+        @keyframes shake {
+            10%, 90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            
+            20%, 80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%, 50%, 70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%, 60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+    
+    </style>
+    
+    
+    
+</head>
+
+<body>
+    <!-- The video -->
+    <video autoplay muted loop id="myVideo">
+        <source src="fullhd.mp4" type="video/mp4">
+    </video>
+    <center>
+        <article class="page1">
+    
+            <h1>HELLO !</h1>
+            <h2>DÉCOUVREZ VOTRE PROFIL <br/> D'APPRENTISSAGE</h2>
+            <img class="QRcode" src="images/q-rcode.svg"></img>
+        </article>
+
+        <section class="page2">
+            <h1>PROFIL APPRENANT <br/>
+                    DES VISITEURS DU SALON</h1>
+            <h2>SRH</h2>
+            <br/>
+            <aside class="user">
+                <header>
+                        <img src="images/ico-profile.svg" class="ico_profile">
+                </header>
+                <p><span class="n-users">---</span> <span class="lb-n-users">NOMBRE D'UTILISATEURS</span></p>
+            </aside>
+            
+
+            <aside class="code">
+                <p>DÉCOUVREZ
+                    <br/> VOTRE PROFIL
+                    <br/> D'APPRENTISSAGE
+                </p>
+                <img class="QRcode" src="images/q-rcode.svg"></img>
+            </aside>
+            <section class="main">
+                    <article class="inductif">
+                            <span class="per-s">%</span>                    
+                            <span class="per-n">--</span>
+                            <span class="per-t">PROFILS <br/> INDUCTIFS</span>
+                        </article>
+                <article class="gauges">
+                    <div class="g-i">
+                        <div class="gf"></div>
+                        <div class="deco"></div>
+                    </div>
+                    <div class="g-d">
+                        <div class="gf"></div>
+                        <div class="deco"></div>
+                    </div>
+                    
+                    
+                </article>
+                <article class="deductif">
+                    <span class="per-s">%</span>                    
+                    <span class="per-n">--</span>
+                    <span class="per-t">PROFILS <br/> DÉDUCTIFS</span>
+                </article>
+            </section>
+
+            <footer>Version Bêta</footer>
+        </section>
+    </center>
+
+    
+    <script>
+            $(document).ready(function(){
+                let url = "https://gameserver-wls.sbt-human.com/api/results/wls/4/salon_srh_yg5kjv8dthtjdrh5ju";
+                let freq = 5*1000; // should 10 seconds
+                let page_freq = 10*1000;
+                
+                let timer = setInterval(function(){                                      
+                    $.ajax({
+                        dataType: "json",
+                        url: url,
+                        data: "",
+                        success: function (data) {
+                            console.log(data);
+                            // update ui
+                            let nUser = data.data.nbTest;
+                            let nInductif = Math.round(data.data.nbDeductif / data.data.nbTest * 100);
+                            let nDeductif = Math.round(data.data.nbInductif / data.data.nbTest * 100);
+
+                            $(".n-users").text(nUser);
+                            $(".inductif .per-n").text(nInductif);
+                            $(".deductif .per-n").text(nDeductif);
+
+                            $(".g-i .gf").css("height", Math.round(nInductif) + "%");
+                            $(".g-d .gf").css("height", Math.round(nDeductif) + "%");
+
+                        }
+                    });
+                }, freq);
+
+                let activePage = 1;
+                $(".page2").hide();
+                let timer1 = setInterval(function(){
+                    if(activePage==1){
+                        $(".page1").fadeOut({duration: 1000,complete: function(){
+                            $(".page2").fadeIn();
+                        }});
+                        
+                        activePage = 2;
+                    }
+                    else{
+                        $(".page2").fadeOut({duration: 1000,complete: function(){
+                            $(".page1").fadeIn();
+                        }});
+                        activePage = 1;
+                    }
+                    
+                }, page_freq);
+            });
+        </script>
+
+    
+</body>
+
+</html>
