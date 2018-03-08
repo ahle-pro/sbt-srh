@@ -1,5 +1,5 @@
 # sbt-srh
-Potential best application in salon SRH
+Potential best application in salon SRH. A science tool for drawing user attention in crowd designed by human.
 
 
 ## Authors
