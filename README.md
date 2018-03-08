@@ -6,6 +6,5 @@ Potential best application in salon SRH. A science tool for drawing user attenti
 * Laurent Sadeg
 * Pia Murgat
 * Anh-Hoang Le
-* Phillipse Amar
 
 and other collaborateurs
