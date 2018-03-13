@@ -12,7 +12,8 @@
         body {
             font-family: HelveticaNeueLT-Roman;
             color: #ffffff;
-            text-shadow: 0px 3px 16px rgba(3, 54, 65, 0.65);
+            /* text-shadow: 0px 3px 16px rgba(3, 54, 65, 0.8); */
+            text-shadow: 0px 3px 16px rgba(0, 0, 0, 0.8);
             margin: auto;
         }
 
@@ -89,8 +90,7 @@
             font-family: HelveticaNeueLT-Roman;
             font-size: 77px;
             letter-spacing: 2.3px;
-            margin-top: 0px;
-            
+            margin-top: 0px;            
         }
 
         .page1 .QRcode {
@@ -145,13 +145,14 @@
             float: left;
         }
         .code p{
+            
             float: left;
             text-align: right;
             font-size: 26px;
-            color: lightgray;
+            color: white;
         }
         .main{
-            grid-gap: 10px;
+            grid-gap: 0px;
             grid-template-columns: 33% 33% 33%;
             width: 600px;
             display: grid;
@@ -161,24 +162,24 @@
             
             height: 600px;
             display: grid;
-            grid-gap: 10px;
-            grid-template-columns: 50% 50%;
+            grid-gap: 15px;
+            grid-template-columns: 45% 45%;
         }
         div[class^="g-"]{
             background-color: rbga(119,136,153, 0.5);
-            width: 60px;
+            width: 100%;
             border-radius: 16px;
             box-shadow: 0px 0px 5px 6px rgba(0,0,0, 0.3);
             position: relative;
         }
         .gf{
             height: 20px;
-            width: 100%;            
+            width: 100%;
             position: absolute;
             bottom: 0;
             border-radius: 0 0 16px 16px;
             background: linear-gradient(to bottom right, grey, grey);
-            transition: all 0.2s;
+            transition: all 2000ms;
         }
         .g-i .gf{
             background: linear-gradient(to bottom right, lightyellow, yellow);
@@ -187,34 +188,69 @@
         .g-d .gf{            
             background: linear-gradient(to bottom right, lightgreen, mediumspringgreen);           
         }
+        .deductif{
+            padding-left: 15px;
+        }
+
         .deductif .per-n{
             color: mediumspringgreen;
         }
+        .inductif{
+            padding-right: 18px;
+        }
+
         .inductif .per-n{
             color: yellow;
         }
 
         .per-t{
             font-family: HelveticaNeueLT-Roman;
-            font-size: 30px;
+            font-weight: 600;
+            font-size: 30px;            
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
+            margin-top: -14px;
         }
+        .inductif .per-t{
+            text-align: right;
+            display: inline-block;
+        }
+        .deductif .per-t{
+            text-align: left;
+            display: inline-block;
+        }
+
+
         .per-n{
-            font-size: 60px;
+            font-size: 120px;
+            font-weight: 300;
+            letter-spacing: -0.05em;
             animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
         }
         .per-s{
             vertical-align: top;
+            font-size: 24px;
+            position: relative;
+            top: 24px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
         }
 
         .user > * {
             float: left;
             margin: 0;
+            
         }
-        .user .p{
+        .user p{
             margin: 0;
+            position: relative;
+            top: -12px;
+            margin: 6px;
+
         }
         .n-users {
-            font-size: 80px;
+            font-size: 98px;
+            font-weight: 900;
+    letter-spacing: -0.1em;
+            letter-spacing: -0.1em;
             display: block;
             text-align: left;
             animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
@@ -228,9 +264,15 @@
             width: 60px;
             height: 60px;
             background-image: url(images/deco.svg);
+            left: 50%;
+            transform: translate(-50%,0%);
         }
         .lb-n-users{
-            color: lightgray;
+            color: white;
+            position: relative;
+            top: -8px;
+            margin: 6px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
         }
 
         @keyframes shake {
@@ -292,9 +334,11 @@
             </aside>
             <section class="main">
                     <article class="inductif">
+                            <div style="float:right">
                             <span class="per-s">%</span>                    
                             <span class="per-n">--</span>
-                            <span class="per-t">PROFILS <br/> INDUCTIFS</span>
+                            </div>
+                            <span class="per-t">PROFILS INDUCTIFS</span>
                         </article>
                 <article class="gauges">
                     <div class="g-i">
@@ -309,9 +353,11 @@
                     
                 </article>
                 <article class="deductif">
-                    <span class="per-s">%</span>                    
-                    <span class="per-n">--</span>
-                    <span class="per-t">PROFILS <br/> DÉDUCTIFS</span>
+                        <div style="float:left">
+                            <span class="per-s">%</span>                    
+                            <span class="per-n">--</span>
+                        </div>
+                    <span class="per-t">PROFILS DÉDUCTIFS</span>
                 </article>
             </section>
 
@@ -321,12 +367,30 @@
 
     
     <script>
+            var srh = {};
+            var nUser_old = 0;
+            
             $(document).ready(function(){
                 let url = "https://gameserver-wls.sbt-human.com/api/results/wls/4/salon_srh_yg5kjv8dthtjdrh5ju";
                 let freq = 5*1000; // should 10 seconds
                 let page_freq = 10*1000;
                 
+                function spinNum(el, num){
+                    $({someValue: 0}).animate({someValue: num}, {
+                        duration: 3000,
+                        easing:'swing', // can be anything
+                        step: function() { // called on every step
+                            // Update the element's text with rounded-up value:
+                            el.text(Math.round(this.someValue));
+                        }
+                    });
+                }
+
                 let timer = setInterval(function(){                                      
+                    
+                }, freq);
+
+                function updateNums(){
                     $.ajax({
                         dataType: "json",
                         url: url,
@@ -335,38 +399,68 @@
                             console.log(data);
                             // update ui
                             let nUser = data.data.nbTest;
-                            let nInductif = Math.round(data.data.nbDeductif / data.data.nbTest * 100);
-                            let nDeductif = Math.round(data.data.nbInductif / data.data.nbTest * 100);
+                            let nInductif = data.data.nbInductif;
+                            let nDeductif = data.data.nbDeductif;
 
-                            $(".n-users").text(nUser);
-                            $(".inductif .per-n").text(nInductif);
-                            $(".deductif .per-n").text(nDeductif);
+                            let perInductif = Math.round(nInductif/nUser * 100);
+                            let perDeductif = Math.round(nDeductif/nUser * 100);
 
-                            $(".g-i .gf").css("height", Math.round(nInductif) + "%");
-                            $(".g-d .gf").css("height", Math.round(nDeductif) + "%");
+                            if(nUser_old==nUser){
+                                // no change
+
+                            }
+                            else{
+                                // update animation
+                                $(".n-users").text(nUser);
+                                spinNum($('.inductif .per-n'), perInductif);
+                                spinNum($('.deductif .per-n'), perDeductif);
+
+                                $(".g-i .gf").css("height", Math.round(perInductif) + "%");
+                                $(".g-d .gf").css("height", Math.round(perDeductif) + "%");
+                            }
+
+                            
 
                         }
                     });
-                }, freq);
+                }
+
+                function resetNum(){
+                    nUser_old = 0;
+                    $(".g-i .gf").css("height", 0 + "%");
+                    $(".g-d .gf").css("height", 0 + "%");
+
+                    $('.inductif .per-n').text("--");
+                    $('.deductif .per-n').text("--");
+                }
 
                 let activePage = 1;
                 $(".page2").hide();
                 let timer1 = setInterval(function(){
                     if(activePage==1){
-                        $(".page1").fadeOut({duration: 1000,complete: function(){
-                            $(".page2").fadeIn();
-                        }});
-                        
+                        // switch from page 1 to page 2
+                        resetNum();
+                        $(".page1").fadeOut({duration: 1000, complete: function(){
+                            $(".page2").fadeIn({duration: 1000, complete:function(){
+                                
+                                updateNums();
+                            }});
+                        }});   
                         activePage = 2;
                     }
                     else{
-                        $(".page2").fadeOut({duration: 1000,complete: function(){
-                            $(".page1").fadeIn();
+                        $(".page2").fadeOut({duration: 1000, complete: function(){
+                            $(".page1").fadeIn({duration: 1000, complete:function(){                                
+                                
+                            }});
                         }});
                         activePage = 1;
-                    }
-                    
+                    }                    
                 }, page_freq);
+
+                // animation counter
+                
+                
             });
         </script>
 
