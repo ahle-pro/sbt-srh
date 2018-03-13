@@ -435,18 +435,24 @@
                 }
 
                 let activePage = 1;
+                let page1_dur = 30;
+                let page2_dur = 60;
+                let timeout = page1_dur;
+
                 $(".page2").hide();
                 let timer1 = setInterval(function(){
+                    timeout--;
+                    if(timeout > 0) return;                    
                     if(activePage==1){
                         // switch from page 1 to page 2
                         resetNum();
                         $(".page1").fadeOut({duration: 1000, complete: function(){
-                            $(".page2").fadeIn({duration: 1000, complete:function(){
-                                
+                            $(".page2").fadeIn({duration: 1000, complete:function(){                                
                                 updateNums();
                             }});
                         }});   
                         activePage = 2;
+                        timeout = page2_dur;
                     }
                     else{
                         $(".page2").fadeOut({duration: 1000, complete: function(){
@@ -455,8 +461,10 @@
                             }});
                         }});
                         activePage = 1;
-                    }                    
-                }, page_freq);
+                        timeout = page1_dur;
+                    }
+                    
+                }, 1000);
 
                 // animation counter
                 
