@@ -309,7 +309,7 @@
     
             <h1>HELLO !</h1>
             <h2>DÉCOUVREZ VOTRE PROFIL <br/> D'APPRENTISSAGE</h2>
-            <img class="QRcode" src="images/q-rcode.svg"></img>
+            <img class="QRcode" src="images/qr-code.svg"></img>
         </article>
 
         <section class="page2">
@@ -330,13 +330,12 @@
                     <br/> VOTRE PROFIL
                     <br/> D'APPRENTISSAGE
                 </p>
-                <img class="QRcode" src="images/q-rcode.svg"></img>
+                <img class="QRcode" src="images/qr-code.svg"></img>
             </aside>
             <section class="main">
                     <article class="inductif">
-                            <div style="float:right">
-                            <span class="per-s">%</span>                    
-                            <span class="per-n">--</span>
+                            <div style="float:right">                                                
+                            <span><span class="per-n">--</span><span class="per-s">%</span></span>                            
                             </div>
                             <span class="per-t">PROFILS INDUCTIFS</span>
                         </article>
@@ -353,9 +352,8 @@
                     
                 </article>
                 <article class="deductif">
-                        <div style="float:left">
-                            <span class="per-s">%</span>                    
-                            <span class="per-n">--</span>
+                        <div style="float:left">                                             
+                            <span><span class="per-n">--</span><span class="per-s">%</span></span>
                         </div>
                     <span class="per-t">PROFILS DÉDUCTIFS</span>
                 </article>
@@ -381,7 +379,8 @@
                         easing:'swing', // can be anything
                         step: function() { // called on every step
                             // Update the element's text with rounded-up value:
-                            el.text(Math.round(this.someValue));
+                            
+                            el.text((Math.round(this.someValue * 100)/100).toString().replace(".", ","));
                         }
                     });
                 }
@@ -402,8 +401,8 @@
                             let nInductif = data.data.nbInductif;
                             let nDeductif = data.data.nbDeductif;
 
-                            let perInductif = Math.round(nInductif/nUser * 100);
-                            let perDeductif = Math.round(nDeductif/nUser * 100);
+                            let perInductif = Math.round(nInductif/nUser * 10000)/100;
+                            let perDeductif = Math.round(nDeductif/nUser * 10000)/100;
 
                             if(nUser_old==nUser){
                                 // no change
@@ -415,6 +414,7 @@
                                 spinNum($('.inductif .per-n'), perInductif);
                                 spinNum($('.deductif .per-n'), perDeductif);
 
+                                debugger;
                                 $(".g-i .gf").css("height", Math.round(perInductif) + "%");
                                 $(".g-d .gf").css("height", Math.round(perDeductif) + "%");
                             }
@@ -442,12 +442,12 @@
                 $(".page2").hide();
                 let timer1 = setInterval(function(){
                     timeout--;
-                    if(timeout > 0) return;                    
+                    if(timeout > 0) return;
                     if(activePage==1){
                         // switch from page 1 to page 2
                         resetNum();
                         $(".page1").fadeOut({duration: 1000, complete: function(){
-                            $(".page2").fadeIn({duration: 1000, complete:function(){                                
+                            $(".page2").fadeIn({duration: 1000, complete:function(){
                                 updateNums();
                             }});
                         }});   
